@@ -20,16 +20,17 @@ class Player(GameSprite):
         keys = key.get_pressed()
         if keys[K_a] and self.rect.x > 5:
             self.rect.x -= self.speed
-        if keys[K_d] and self.rect.x > 495:
+        if keys[K_d] and self.rect.x < 633:
             self.rect.x += self.speed
     def fire(self):
         pass
 
+player = Player("player.png", 300, 400, 8)
 monsters = sprite.Group()
-monsters.add(monster)
-monsters.draw(window)
-monsters.update()
+font.init()
+font1 = font.Font(None, 36)
 lost = 0
+text_lose = font1.render("Пропущено" + str(lost), 1, (255, 255, 255))
 
 class Enemy(GameSprite):
     def update(self):
@@ -41,6 +42,25 @@ class Enemy(GameSprite):
             lost += 1
 
 
-for i in range(1, 20):
-    monster = Enemy("enemy.png", randint(10, 690), 510, randint(3, 8))
+for i in range(1, 15):
+    monster = Enemy("enemy.png", randint(70, 670), 500, randint(3, 6))
     monsters.add(monster)
+
+game = True
+game_finish = False
+
+while game:
+    for e in event.get():
+        if e.type == QUIT:
+            game = False
+    if not game_finish:
+        window.blit(background, (0 , 0))
+        window.blit(text_lose, (50, 50) )
+        monsters.draw(window)
+        monsters.update()
+        player.reset()
+        player.update()
+        display.update()
+        
+    time.delay(30)
+        
